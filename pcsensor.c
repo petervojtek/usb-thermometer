@@ -250,6 +250,7 @@ void interrupt_read(usb_dev_handle *dev) {
 void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
  
     int r,i, temperature;
+    float temperature2;
     unsigned char answer[reqIntLen];
     bzero(answer, reqIntLen);
     
@@ -266,9 +267,13 @@ void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
       printf("\n");
     }
     
-    temperature = (answer[3] & 0xFF) + (answer[2] << 8);
-    *tempC = temperature * (125.0 / 32000.0);
 
+    temperature = (answer[3] & 0xFF) + (answer[2] << 8);
+    temperature2 = temperature * (125.0 / 32000.0);
+    if(temperature2 > 200.0){
+    	temperature2 = temperature2 - 256.0;
+    }
+    *tempC = temperature2;
 }
 
 void bulk_transfer(usb_dev_handle *dev) {
