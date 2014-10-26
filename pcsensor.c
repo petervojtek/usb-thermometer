@@ -268,7 +268,7 @@ void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
     }
     
 
-    temperature = (answer[3] & 0xFF) + (answer[2] << 8);
+    temperature = (answer[5] & 0xFF) + (answer[4] << 8);
     temperature2 = temperature * (125.0 / 32000.0);
     if(temperature2 > 200.0){
     	temperature2 = temperature2 - 256.0;
