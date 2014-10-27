@@ -428,6 +428,7 @@ int main( int argc, char **argv) {
               } else {
                   printf("Temperature %.2fF %.2fC\n", (9.0 / 5.0 * tempc + 32.0), tempc);
               }
+              fflush(stdout);
            }
            
            if (!bsalir)
