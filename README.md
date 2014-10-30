@@ -7,9 +7,10 @@ The original version of pcsensor0.0.1 was located on [this page](http://bailey.s
 ### How to run it
 
 1. clone this repository
-2. `sudo apt-get install libusb-dev`
-3. $ `make`
-4. $ `sudo ./pcsensor`
+2. `$ sudo apt-get install libusb-dev`
+3. `$ make`
+4. connect the thermometer
+5. `$ sudo ./pcsensor`
 
 The output looks like:
 
