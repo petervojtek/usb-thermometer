@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include <string.h>
+#include <ctype.h>
 #include <errno.h>
 #include <signal.h> 
  
@@ -270,7 +271,7 @@ void interrupt_read(usb_dev_handle *dev) {
     unsigned char answer[reqIntLen];
     bzero(answer, reqIntLen);
     
-    r = usb_interrupt_read(dev, 0x82, answer, reqIntLen, timeout);
+    r = usb_interrupt_read(dev, 0x82, (char*)answer, reqIntLen, timeout);
     if( r != reqIntLen )
     {
           perror("USB interrupt read"); bad("USB read failed"); 
@@ -285,12 +286,11 @@ void interrupt_read(usb_dev_handle *dev) {
 
 void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
  
-    int r,i, temperature;
-    float temperature2;
+    int r,i;
     unsigned char answer[reqIntLen];
     bzero(answer, reqIntLen);
     
-    r = usb_interrupt_read(dev, 0x82, answer, reqIntLen, timeout);
+    r = usb_interrupt_read(dev, 0x82, (char*)answer, reqIntLen, timeout);
     if( r != reqIntLen )
     {
           perror("USB interrupt read"); bad("USB read failed"); 
