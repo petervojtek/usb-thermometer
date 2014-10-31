@@ -267,13 +267,9 @@ void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
       printf("\n");
     }
     
-
-    temperature = (answer[5] & 0xFF) + (answer[4] << 8);
-    temperature2 = temperature * (125.0 / 32000.0);
-    if(temperature2 > 200.0){
-    	temperature2 = temperature2 - 256.0;
-    }
-    *tempC = temperature2;
+    /* Temperature in C is a 16-bit signed fixed-point number, big-endian */
+    *tempC = (float)(signed char)answer[4] +
+             answer[5] / 256.0f;
 }
 
 void bulk_transfer(usb_dev_handle *dev) {
