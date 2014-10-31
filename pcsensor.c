@@ -55,6 +55,8 @@ const static int timeout=5000; /* timeout in ms */
 const static char uTemperatura[] = { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
 const static char uIni1[] = { 0x01, 0x82, 0x77, 0x01, 0x00, 0x00, 0x00, 0x00 };
 const static char uIni2[] = { 0x01, 0x86, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00 };
+ /* Offset of temperature in read buffer; varies by product */
+static size_t tempOffset;
 
 static int bsalir=1;
 static int debug=0;
@@ -62,6 +64,16 @@ static int seconds=5;
 static int formato=0;
 static int mrtg=0;
 
+/* Even within the same VENDOR_ID / PRODUCT_ID, there are hardware variations
+ * which we can detect by reading the USB product ID string. This determines
+ * where the temperature offset is stored in the USB read buffer. */
+const static struct product_hw {
+    size_t      offset;
+    const char *id_string;
+} product_ids[] = {
+    { 4, "TEMPer1F_V1.3" },
+    { 2, 0 } /* default offset is 2 */
+};
 
 void bad(const char *why) {
         fprintf(stderr,"Fatal error> %s\n",why);
@@ -139,8 +151,31 @@ usb_dev_handle* setup_libusb_access() {
         return lvr_winusb;
 }
  
- 
- 
+
+static void read_product_string(usb_dev_handle *handle, struct usb_device *dev)
+{
+    char prodIdStr[256];
+    const struct product_hw *p;
+    int strLen;
+
+    memset(prodIdStr, 0, sizeof(prodIdStr));
+    strLen = usb_get_string_simple(handle, dev->descriptor.iProduct, prodIdStr,
+                                   sizeof(prodIdStr)-1);
+    if (debug) {
+        if (strLen < 0)
+            puts("Couldn't read iProduct string");
+        else
+            printf("iProduct: %s\n", prodIdStr);
+    }
+
+    for (p = product_ids; p->id_string; ++p) {
+        if (!strncmp(p->id_string, prodIdStr, sizeof(prodIdStr)))
+            break;
+    }
+    tempOffset = p->offset;
+}
+
+
 usb_dev_handle *find_lvr_winusb() {
  
      struct usb_bus *bus;
@@ -159,6 +194,7 @@ usb_dev_handle *find_lvr_winusb() {
                                         printf("Could not open USB device\n");
                                         return NULL;
                                 }
+                                read_product_string(handle, dev);
                                 return handle;
                         }
                 }
@@ -268,8 +304,8 @@ void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
     }
     
     /* Temperature in C is a 16-bit signed fixed-point number, big-endian */
-    *tempC = (float)(signed char)answer[4] +
-             answer[5] / 256.0f;
+    *tempC = (float)(signed char)answer[tempOffset] +
+             answer[tempOffset+1] / 256.0f;
 }
 
 void bulk_transfer(usb_dev_handle *dev) {
