@@ -1,15 +1,10 @@
-usb-thermometer: TEMPer1 and TEMPer1F
-===============
+## usb-thermometer 
 
-### From Pete Chapman:
+Read temperature from cheap usb thermometers.
 
-* Fixed poor precision for TEMPer1F (iProduct string "TEMPer1F_V1.3").
-
-### From Peter Vojtek:
-
-The original version of pcsensor0.0.1 was located on [this page](http://bailey.st/blog/2012/04/12/dirt-cheap-usb-temperature-sensor-with-python-sms-alerting-system/). I took the source code and fixed following bug:
-
-* temperatures below zero overflow: 254.3 C is displayed instead of -1.3 C, . 
+Supported devices:
+* TEMPer1
+* TEMPer1F
 
 ### How to run it
 
@@ -25,4 +20,17 @@ The output looks like:
 2014/10/30 07:00:36 Temperature 73.96F 23.31C
 ```
 
+### Changelog
 
+#### 2014-10-31
+
+Pete Chapman: Fixed poor precision for TEMPer1F (iProduct string "TEMPer1F_V1.3").
+
+#### 2013-05-31
+
+Peter Vojtek: took original version of pcsensor0.0.1 from [this page](http://bailey.st/blog/2012/04/12/dirt-cheap-usb-temperature-sensor-with-python-sms-alerting-system/) and fixed bug: temperatures below zero overflow: 254.3 C is displayed instead of -1.3 C
+
+
+### Contribution
+
+Send a pull request via github.
