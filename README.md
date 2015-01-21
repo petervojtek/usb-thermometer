@@ -22,6 +22,10 @@ The output looks like:
 
 ### Changelog
 
+#### 2015-01-22
+
+Mebus: added Nagios/Icinga Plugin
+
 #### 2014-10-31
 
 Pete Chapman: Fixed poor precision for TEMPer1F (iProduct string "TEMPer1F_V1.3").
