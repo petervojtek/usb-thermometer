@@ -347,7 +347,7 @@ int main( int argc, char **argv) {
      struct tm *local;
      time_t t;
 
-     while ((c = getopt (argc, argv, "mfcvhl::")) != -1)
+     while ((c = getopt (argc, argv, "mnfcvhl::")) != -1)
      switch (c)
        {
        case 'v':
@@ -358,6 +358,9 @@ int main( int argc, char **argv) {
          break;
        case 'f':
          formato=2; //Fahrenheit
+         break;
+       case 'n':
+         formato=3;
          break;
        case 'm':
          mrtg=1;
@@ -386,6 +389,7 @@ int main( int argc, char **argv) {
 	 printf("          -c output only in Celsius\n");
 	 printf("          -f output only in Fahrenheit\n");
 	 printf("          -m output for mrtg integration\n");
+	 printf("          -n only display value in Celsius for Nagios\n");
   
 	 exit(EXIT_FAILURE);
        default:
@@ -445,6 +449,9 @@ int main( int argc, char **argv) {
 
               printf("pcsensor\n");
            } else {
+
+            if (formato != 3) {
+
               printf("%04d/%02d/%02d %02d:%02d:%02d ", 
                           local->tm_year +1900, 
                           local->tm_mon + 1, 
@@ -453,7 +460,13 @@ int main( int argc, char **argv) {
                           local->tm_min,
                           local->tm_sec);
 
-              if (formato==2) {
+            }
+
+              if (formato==3) {
+                  // for Nagios
+                  printf("%.2f\n", tempc);
+              }
+              else if (formato==2) {
                   printf("Temperature %.2fF\n", (9.0 / 5.0 * tempc + 32.0));
               } else if (formato==1) {
                   printf("Temperature %.2fC\n", tempc);
