@@ -20,6 +20,20 @@ The output looks like:
 2014/10/30 07:00:36 Temperature 73.96F 23.31C
 ```
 
+
+
+To print just the `F` value
+```
+$ sudo ./pcsensor | awk '{print $4}'
+73.96F
+```
+
+To print just the `C` value
+```
+$ sudo ./pcsensor | awk '{print $5}'
+23.31C
+```
+
 ### Changelog
 
 #### 2014-10-31
