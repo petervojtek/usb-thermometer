@@ -343,11 +343,12 @@ int main( int argc, char **argv) {
  
      usb_dev_handle *lvr_winusb = NULL;
      float tempc;
+     float tempc_measure_offset = 0.0;
      int c;
      struct tm *local;
      time_t t;
 
-     while ((c = getopt (argc, argv, "mfcvhl::")) != -1)
+     while ((c = getopt (argc, argv, "mfcvhs:l::")) != -1)
      switch (c)
        {
        case 'v':
@@ -358,6 +359,16 @@ int main( int argc, char **argv) {
          break;
        case 'f':
          formato=2; //Fahrenheit
+         break;
+       case 's':
+         if (!sscanf(optarg,"%f",&tempc_measure_offset)==1) {
+           fprintf (stderr, "Error: '%s' is not (float) numeric.\n", optarg);
+           exit(EXIT_FAILURE);
+         }
+         if (tempc_measure_offset > 100000 || tempc_measure_offset < -100000) {
+           fprintf (stderr, "Error: please provide a reasonable offset\n");
+           exit(EXIT_FAILURE);
+         }
          break;
        case 'm':
          mrtg=1;
@@ -383,6 +394,7 @@ int main( int argc, char **argv) {
 	 printf("          -h help\n");
 	 printf("          -v verbose\n");
 	 printf("          -l[n] loop every 'n' seconds, default value is 5s\n");
+	 printf("          -s<f> substract 'f' °C (float) from measured temperature\n");
 	 printf("          -c output only in Celsius\n");
 	 printf("          -f output only in Fahrenheit\n");
 	 printf("          -m output for mrtg integration\n");
@@ -426,6 +438,7 @@ int main( int argc, char **argv) {
      do {
            control_transfer(lvr_winusb, uTemperatura );
            interrupt_read_temperatura(lvr_winusb, &tempc);
+           tempc = tempc - tempc_measure_offset;
 
            t = time(NULL);
            local = localtime(&t);
