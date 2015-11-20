@@ -1,4 +1,4 @@
-## usb-thermometer 
+## usb-thermometer
 
 Read temperature from cheap usb thermometers.
 
@@ -26,6 +26,9 @@ The output looks like:
 
 [Hendrik Bergunde](https://github.com/hendrikb/): Introduce the ```-s``` parameter, that takes an offset as mandatory argument that gets **substracted** from (all) displayed temperatures. This can become handy, since the measured temperature sometimes looks significantly too high. The argument is considered to be given in degree Celsius (°C) and supports integer and float values. Practically, I can recommend an offset of about ```-s7.5```. The Fahrenheit values automatically take advantage of the offset as well.
 
+#### 2015-01-22
+
+Mebus: added Nagios/Icinga Plugin
 
 #### 2014-10-31
 
