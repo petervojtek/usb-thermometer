@@ -1,4 +1,12 @@
+prefix ?= /usr/local
+bindir ?= $(prefix)/bin
+DESTDIR ?= /
+
 all:	pcsensor
+
+install: pcsensor
+	test -d $(DESTDIR)$(bindir) || mkdir -p  $(DESTDIR)$(bindir)
+	install -m 755 $^ $(DESTDIR)$(bindir)
 
 CFLAGS = -O2 -Wall
 
