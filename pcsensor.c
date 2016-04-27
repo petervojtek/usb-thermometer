@@ -348,7 +348,7 @@ int main( int argc, char **argv) {
      struct tm *local;
      time_t t;
 
-     while ((c = getopt (argc, argv, "mnfcvhls::")) != -1)
+     while ((c = getopt (argc, argv, "mnfcvhl::s::")) != -1)
      switch (c)
        {
        case 'v':
