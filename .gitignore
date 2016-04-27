@@ -1,1 +1,3 @@
 /pcsensor
+/collectd_pcsensor_temper.sh
+/collectd_pcsensor_temper.conf

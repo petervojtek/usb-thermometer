@@ -1,0 +1,5 @@
+LoadPlugin exec
+
+<Plugin exec>
+  Exec "nobody" "@@BIN_DIR@@/collectd_pcsensor_temper.sh"
+</Plugin>

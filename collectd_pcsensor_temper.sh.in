@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+set -euo pipefail
+IFS=$'\n\t'
+
+PCSENSOR=@@BIN_DIR@@/pcsensor
+
+HOSTNAME="${COLLECTD_HOSTNAME:-localhost}"
+INTERVAL="${COLLECTD_INTERVAL:-60}"
+ 
+${PCSENSOR} -l${INTERVAL} -n | sed -e "s/^.*\$/PUTVAL \"$HOSTNAME\/pcsensor\/gauge-temper\" interval=$INTERVAL N:\0/"
+
