@@ -27,6 +27,10 @@ The output looks like:
 
 ### Changelog
 
+#### 2016-04-30
+
+[ph1l](https://github.com/ph1l) added Collectd plugin and fixed optstring for optional argument to -l.
+
 #### 2016-01-10
 
 [asac](https://github.com/asac): add make install rule for easier distro integration
