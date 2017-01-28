@@ -76,8 +76,9 @@ const static struct product_hw {
     { 2, 0 } /* default offset is 2 */
 };
 
-void bad(const char *why) {
-        fprintf(stderr,"Fatal error> %s\n",why);
+void bad(const char *why, usb_dev_handle *dev) {
+        fprintf(stderr,"Fatal error> %s. Resetting Device.\n",why);
+        usb_reset(dev);
         exit(17);
 }
 
@@ -127,8 +128,6 @@ usb_dev_handle* setup_libusb_access() {
 
 
         usb_detach(lvr_winusb, INTERFACE1);
-
-
         usb_detach(lvr_winusb, INTERFACE2);
 
 
@@ -212,7 +211,7 @@ void ini_control_transfer(usb_dev_handle *dev) {
     r = usb_control_msg(dev, 0x21, 0x09, 0x0201, 0x00, (char *) question, 2, timeout);
     if( r < 0 )
     {
-          perror("USB control write"); bad("USB write failed");
+          perror("USB control write"); bad("USB write failed", dev);
     }
 
 
@@ -232,7 +231,7 @@ void control_transfer(usb_dev_handle *dev, const char *pquestion) {
     r = usb_control_msg(dev, 0x21, 0x09, 0x0200, 0x01, (char *) question, reqIntLen, timeout);
     if( r < 0 )
     {
-          perror("USB control write"); bad("USB write failed");
+          perror("USB control write"); bad("USB write failed", dev);
     }
 
     if(debug) {
@@ -250,12 +249,12 @@ void interrupt_transfer(usb_dev_handle *dev) {
     r = usb_interrupt_write(dev, endpoint_Int_out, question, reqIntLen, timeout);
     if( r < 0 )
     {
-          perror("USB interrupt write"); bad("USB write failed");
+          perror("USB interrupt write"); bad("USB write failed", dev);
     }
     r = usb_interrupt_read(dev, endpoint_Int_in, answer, reqIntLen, timeout);
     if( r != reqIntLen )
     {
-          perror("USB interrupt read"); bad("USB read failed");
+          perror("USB interrupt read"); bad("USB read failed", dev);
     }
 
     if(debug) {
@@ -274,7 +273,7 @@ void interrupt_read(usb_dev_handle *dev) {
     r = usb_interrupt_read(dev, 0x82, (char*)answer, reqIntLen, timeout);
     if( r != reqIntLen )
     {
-          perror("USB interrupt read"); bad("USB read failed");
+          perror("USB interrupt read"); bad("USB read failed", dev);
     }
 
     if(debug) {
@@ -293,7 +292,7 @@ void interrupt_read_temperatura(usb_dev_handle *dev, float *tempC) {
     r = usb_interrupt_read(dev, 0x82, (char*)answer, reqIntLen, timeout);
     if( r != reqIntLen )
     {
-          perror("USB interrupt read"); bad("USB read failed");
+          perror("USB interrupt read"); bad("USB read failed", dev);
     }
 
 
@@ -316,12 +315,12 @@ void bulk_transfer(usb_dev_handle *dev) {
     r = usb_bulk_write(dev, endpoint_Bulk_out, NULL, 0, timeout);
     if( r < 0 )
     {
-          perror("USB bulk write"); bad("USB write failed");
+          perror("USB bulk write"); bad("USB write failed", dev);
     }
     r = usb_bulk_read(dev, endpoint_Bulk_in, answer, reqBulkLen, timeout);
     if( r != reqBulkLen )
     {
-          perror("USB bulk read"); bad("USB read failed");
+          perror("USB bulk read"); bad("USB read failed", dev);
     }
 
 
