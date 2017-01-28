@@ -487,8 +487,12 @@ int main( int argc, char **argv) {
               fflush(stdout);
            }
 
-           if (!bsalir)
+           if (bsalir) {
+              control_transfer(lvr_winusb, uTemperatura );
+              interrupt_read_temperatura(lvr_winusb, &tempc);
+           } else {
               sleep(seconds);
+           }
      } while (!bsalir);
 
      usb_release_interface(lvr_winusb, INTERFACE1);
