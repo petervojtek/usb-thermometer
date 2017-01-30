@@ -27,6 +27,10 @@ The output looks like:
 
 ### Changelog
 
+#### 2017-01-30
+
+[TuxInvader](https://github.com/TuxInvader) - [reset device if it hangs](https://github.com/petervojtek/usb-thermometer/pull/12#issue-203813306)
+
 #### 2016-04-30
 
 [ph1l](https://github.com/ph1l) added Collectd plugin and fixed optstring for optional argument to -l.
