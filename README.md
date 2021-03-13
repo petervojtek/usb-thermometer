@@ -1,6 +1,6 @@
 ## usb-thermometer
 
-Read temperature from cheap usb thermometers.
+Read temperature from cheap usb thermometers.  (0c45:7401 "TEMPer1F_V1.3")
 
 Supported devices:
 * TEMPer1
